@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Adicionar Banco</title>
+  </head>
+  <body>
+    <h1>Adicionar Novo Banco</h1>
+
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Salvar</button>
+    </form>
+
+    <br />
+    <a href="{% url 'listar_bancos' %}">Voltar para a lista</a>
+  </body>
+</html>

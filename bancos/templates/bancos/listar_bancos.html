@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Meus Bancos</title>
+  </head>
+  <body>
+    <h1>Meus Bancos e Cartões</h1>
+
+    {% if bancos %}
+    <ul>
+      {% for banco in bancos %}
+      <li>
+        <strong>{{ banco.instituicao }}</strong> - Limite: R$ {{
+        banco.limite_credito }}
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Você ainda não cadastrou nenhum banco.</p>
+    <p><a href="/admin/bancos/banco/add/">Cadastre o primeiro!</a></p>
+    {% endif %}
+  </body>
+</html>

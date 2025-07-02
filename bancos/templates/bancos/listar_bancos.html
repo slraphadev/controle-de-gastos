@@ -20,7 +20,7 @@
     </ul>
     {% else %}
     <p>Você ainda não cadastrou nenhum banco.</p>
-    <p><a href="/admin/bancos/banco/add/">Cadastre o primeiro!</a></p>
+    <p><a href="{% url 'adicionar_banco' %}">Cadastre o primeiro!</a></p>
     {% endif %}
   </body>
 </html>

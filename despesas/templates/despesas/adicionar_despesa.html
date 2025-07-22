@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Adicionar Despesa</title>
+  </head>
+  <body>
+    <h1>Adicionar Nova Despesa</h1>
+
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Salvar Despesa</button>
+    </form>
+
+    <br />
+    <a href="{% url 'dashboard' %}">Voltar para a Dashboard</a>
+  </body>
+</html>

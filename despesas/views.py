@@ -1,6 +1,6 @@
 # despesas/views.py
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from .models import Despesa
@@ -10,16 +10,9 @@ from bancos.models import Banco
 
 @login_required
 def listar_despesas(request):
-    # 1. Busca as despesas do usuário, ordenadas
     despesas_do_usuario = Despesa.objects.filter(usuario=request.user).order_by('-data_compra')
-
-    # 2. Calcula o total gasto
     soma_despesas = despesas_do_usuario.aggregate(Sum('valor_total'))
-    
-    # 3. Pega o valor da soma ou define como 0 se não houver despesas
     total_gasto = soma_despesas['valor_total__sum'] if soma_despesas['valor_total__sum'] else 0
-
-    # 4. Adiciona tudo ao contexto para ser usado no template
     contexto = {
         'despesas': despesas_do_usuario,
         'total_gasto': total_gasto,
@@ -30,7 +23,6 @@ def listar_despesas(request):
 @login_required
 def adicionar_despesa(request):
     if request.method == 'POST':
-        # Passa os dados do formulário e o usuário logado
         form = DespesaForm(request.POST, user=request.user)
         if form.is_valid():
             despesa = form.save(commit=False)
@@ -38,8 +30,31 @@ def adicionar_despesa(request):
             despesa.save()
             return redirect('dashboard')
     else:
-        # Mostra um formulário em branco, passando o usuário
         form = DespesaForm(user=request.user)
     
     contexto = {'form': form}
     return render(request, 'despesas/adicionar_despesa.html', contexto)
+
+
+# --- NOVA VIEW DE EDITAR ---
+@login_required
+def editar_despesa(request, pk):
+    despesa = get_object_or_404(Despesa, pk=pk, usuario=request.user)
+    if request.method == 'POST':
+        form = DespesaForm(request.POST, user=request.user, instance=despesa)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = DespesaForm(user=request.user, instance=despesa)
+    return render(request, 'despesas/editar_despesa.html', {'form': form, 'despesa': despesa})
+
+
+# --- NOVA VIEW DE DELETAR ---
+@login_required
+def deletar_despesa(request, pk):
+    despesa = get_object_or_404(Despesa, pk=pk, usuario=request.user)
+    if request.method == 'POST':
+        despesa.delete()
+        return redirect('dashboard')
+    return render(request, 'despesas/deletar_despesa.html', {'despesa': despesa})

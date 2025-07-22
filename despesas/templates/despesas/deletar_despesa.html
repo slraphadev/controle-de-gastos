@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deletar Despesa</title>
+  </head>
+  <body>
+    <h1>Tem certeza?</h1>
+    <p>
+      Você está prestes a deletar a despesa:
+      <strong>{{ despesa.nome }} ({{ despesa.banco.instituicao }})</strong>.
+    </p>
+    <p>Esta ação não pode ser desfeita.</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit">Sim, tenho certeza e quero deletar</button>
+      <br /><br />
+      <a href="{% url 'dashboard' %}">Cancelar</a>
+    </form>
+  </body>
+</html>

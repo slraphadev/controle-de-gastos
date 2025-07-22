@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Editar Banco</title>
+  </head>
+  <body>
+    <h1>Editando: {{ banco.instituicao }}</h1>
+
+    <form method="post">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Salvar Alterações</button>
+    </form>
+
+    <br />
+    <a href="{% url 'listar_bancos' %}">Cancelar</a>
+  </body>
+</html>

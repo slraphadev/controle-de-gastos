@@ -13,8 +13,9 @@
     <ul>
       {% for banco in bancos %}
       <li>
-        <strong>{{ banco.instituicao }}</strong> - Limite: R$ {{
-        banco.limite_credito }}
+        <strong>{{ banco.instituicao }}</strong> - Limite: R$ {{ banco.limite_credito|floatformat:2 }}
+        <a href="{% url 'editar_banco' pk=banco.pk %}">(Editar)</a>
+        <a href="{% url 'deletar_banco' pk=banco.pk %}">(Deletar)</a>
       </li>
       {% endfor %}
     </ul>

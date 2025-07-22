@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Deletar Banco</title>
+  </head>
+  <body>
+    <h1>Tem certeza?</h1>
+    <p>
+      Você está prestes a deletar o banco:
+      <strong>{{ banco.instituicao }}</strong>.
+    </p>
+    <p>Esta ação não pode ser desfeita.</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit">Sim, tenho certeza e quero deletar</button>
+      <br /><br />
+      <a href="{% url 'listar_bancos' %}">Cancelar</a>
+    </form>
+  </body>
+</html>

@@ -9,7 +9,13 @@
 
     <div style="background-color: #f0f0f0; padding: 15px; margin-bottom: 20px">
       <h2>Visão Geral</h2>
-      <p><strong>Total em Uso:</strong> R$ {{ total_gasto|floatformat:2 }}</p>
+      <p><strong>Limite Total:</strong> R$ {{ limite_total|floatformat:2 }}</p>
+      <p style="color: red">
+        <strong>Total em Uso:</strong> R$ {{ total_em_uso|floatformat:2 }}
+      </p>
+      <p style="color: green">
+        <strong>Limite Disponível:</strong> R$ {{ limite_disponivel|floatformat:2 }}
+      </p>
     </div>
 
     <a href="{% url 'adicionar_despesa' %}">Adicionar Nova Despesa</a>
@@ -22,12 +28,12 @@
       <li>
         <strong>{{ despesa.nome }}</strong> ({{ despesa.banco.instituicao }})
         <p style="margin-top: 4px; margin-bottom: 12px">
-          Valor: R$ {{ despesa.valor_total|floatformat:2 }} | Parcelas: {{ despesa.numero_parcelas }}x | Data: {{ despesa.data_compra|date:"d/m/Y" }}
-
+        <p style="margin-top: 4px; margin-bottom: 12px">
+          Valor: R$ {{ despesa.valor_total }} | Parcelas: {{ despesa.numero_parcelas }}x | Data: {{ despesa.data_compra|date:"d/m/Y" }}
+        
           <a href="{% url 'editar_despesa' pk=despesa.pk %}">(Editar)</a>
           <a href="{% url 'deletar_despesa' pk=despesa.pk %}">(Deletar)</a>
         </p>
-      </li>
       {% endfor %}
     </ul>
     {% else %}

@@ -10,15 +10,34 @@ from bancos.models import Banco
 
 @login_required
 def listar_despesas(request):
-    despesas_do_usuario = Despesa.objects.filter(usuario=request.user).order_by('-data_compra')
-    soma_despesas = despesas_do_usuario.aggregate(Sum('valor_total'))
-    total_gasto = soma_despesas['valor_total__sum'] if soma_despesas['valor_total__sum'] else 0
+    # --- Lógica de Despesas (já tínhamos) ---
+    despesas = Despesa.objects.filter(usuario=request.user)
+    soma_despesas = despesas.aggregate(Sum('valor_total'))
+    total_em_uso = soma_despesas['valor_total__sum'] if soma_despesas['valor_total__sum'] else 0
+
+    # --- Lógica de Limites (NOVO) ---
+    # 1. Busca todos os bancos do usuário
+    bancos = Banco.objects.filter(usuario=request.user)
+    
+    # 2. Calcula o limite de crédito total somando o limite de cada banco
+    soma_limites = bancos.aggregate(Sum('limite_credito'))
+    limite_total = soma_limites['limite_credito__sum'] if soma_limites['limite_credito__sum'] else 0
+    
+    # 3. Calcula o limite disponível
+    limite_disponivel = limite_total - total_em_uso
+
+    # --- Enviando tudo para o template ---
     contexto = {
-        'despesas': despesas_do_usuario,
-        'total_gasto': total_gasto,
+        'despesas': despesas.order_by('-data_compra'),
+        'total_em_uso': total_em_uso,
+        'limite_total': limite_total,
+        'limite_disponivel': limite_disponivel,
     }
     return render(request, 'despesas/dashboard.html', contexto)
 
+
+# O resto do arquivo (adicionar_despesa, editar_despesa, deletar_despesa) continua igual
+# ...
 
 @login_required
 def adicionar_despesa(request):
@@ -36,7 +55,6 @@ def adicionar_despesa(request):
     return render(request, 'despesas/adicionar_despesa.html', contexto)
 
 
-# --- NOVA VIEW DE EDITAR ---
 @login_required
 def editar_despesa(request, pk):
     despesa = get_object_or_404(Despesa, pk=pk, usuario=request.user)
@@ -50,7 +68,6 @@ def editar_despesa(request, pk):
     return render(request, 'despesas/editar_despesa.html', {'form': form, 'despesa': despesa})
 
 
-# --- NOVA VIEW DE DELETAR ---
 @login_required
 def deletar_despesa(request, pk):
     despesa = get_object_or_404(Despesa, pk=pk, usuario=request.user)

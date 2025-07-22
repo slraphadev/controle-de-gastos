@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import path, include
+from despesas import views as despesas_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('bancos/', include('bancos.urls')),
+    path('dashboard/', despesas_views.listar_despesas, name='dashboard'),
 ]

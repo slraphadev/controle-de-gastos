@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Minhas Despesas</title>
+  </head>
+  <body>
+    <h1>Minha Dashboard de Despesas</h1>
+
+    <a href="#">Adicionar Nova Despesa</a>
+    <hr />
+
+    <h2>Últimos Lançamentos</h2>
+    {% if despesas %}
+    <ul>
+      {% for despesa in despesas %}
+      <li>
+        <strong>{{ despesa.nome }}</strong> ({{ despesa.banco.instituicao }})
+        <p>
+          Valor: R$ {{ despesa.valor_total }} | Parcelas: {{
+          despesa.numero_parcelas }}x | Data: {{
+          despesa.data_compra|date:"d/m/Y" }}
+        </p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>Você ainda não tem nenhuma despesa cadastrada.</p>
+    {% endif %}
+  </body>
+</html>

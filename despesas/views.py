@@ -36,9 +36,6 @@ def listar_despesas(request):
     return render(request, 'despesas/dashboard.html', contexto)
 
 
-# O resto do arquivo (adicionar_despesa, editar_despesa, deletar_despesa) continua igual
-# ...
-
 @login_required
 def adicionar_despesa(request):
     if request.method == 'POST':
@@ -46,6 +43,23 @@ def adicionar_despesa(request):
         if form.is_valid():
             despesa = form.save(commit=False)
             despesa.usuario = request.user
+            
+            # --- LÓGICA DE CATEGORIZAÇÃO AUTOMÁTICA (NOVO) ---
+            nome_despesa_lower = despesa.nome.lower()
+            if any(palavra in nome_despesa_lower for palavra in ['comida', 'almoço', 'janta', 'restaurante', 'mercado', 'ifood']):
+                despesa.categoria = 'ALIMENTACAO'
+            elif any(palavra in nome_despesa_lower for palavra in ['uber', '99', 'gasolina', 'transporte', 'onibus']):
+                despesa.categoria = 'TRANSPORTE'
+            elif any(palavra in nome_despesa_lower for palavra in ['aluguel', 'condominio', 'luz', 'internet']):
+                despesa.categoria = 'MORADIA'
+            elif any(palavra in nome_despesa_lower for palavra in ['cinema', 'show', 'bar', 'streaming', 'spotify']):
+                despesa.categoria = 'LAZER'
+            elif any(palavra in nome_despesa_lower for palavra in ['farmacia', 'remedio', 'medico', 'consulta']):
+                despesa.categoria = 'SAUDE'
+            else:
+                despesa.categoria = 'OUTROS'
+            # --- FIM DA LÓGICA ---
+            
             despesa.save()
             return redirect('dashboard')
     else:

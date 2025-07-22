@@ -26,14 +26,13 @@
     <ul>
       {% for despesa in despesas %}
       <li>
-        <strong>{{ despesa.nome }}</strong> ({{ despesa.banco.instituicao }})
+        <strong>{{ despesa.nome }}</strong> ({{ despesa.banco.instituicao }}) -
+        <strong>Categoria: {{ despesa.get_categoria_display }}</strong>
         <p style="margin-top: 4px; margin-bottom: 12px">
-        <p style="margin-top: 4px; margin-bottom: 12px">
-          Valor: R$ {{ despesa.valor_total }} | Parcelas: {{ despesa.numero_parcelas }}x | Data: {{ despesa.data_compra|date:"d/m/Y" }}
-        
+          Valor: R$ {{ despesa.valor_total|floatformat:2 }} | Parcelas: {{ despesa.numero_parcelas }}x | Data: {{ despesa.data_compra|date:"d/m/Y" }}
           <a href="{% url 'editar_despesa' pk=despesa.pk %}">(Editar)</a>
           <a href="{% url 'deletar_despesa' pk=despesa.pk %}">(Deletar)</a>
-        </p>
+      </li>
       {% endfor %}
     </ul>
     {% else %}

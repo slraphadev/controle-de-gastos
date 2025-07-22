@@ -7,6 +7,10 @@
   <body>
     <h1>Minha Dashboard de Despesas</h1>
 
+    <div style="background-color: #f0f0f0; padding: 15px; margin-bottom: 20px">
+      <h2>Visão Geral</h2>
+      <p><strong>Total em Uso:</strong> R$ {{ total_gasto|floatformat:2 }}</p>
+    </div>
     <a href="{% url 'adicionar_despesa' %}">Adicionar Nova Despesa</a>
     <hr />
 
@@ -16,7 +20,7 @@
       {% for despesa in despesas %}
       <li>
         <strong>{{ despesa.nome }}</strong> ({{ despesa.banco.instituicao }})
-        <p>
+        <p style="margin-top: 4px; margin-bottom: 12px">
           Valor: R$ {{ despesa.valor_total }} | Parcelas: {{
           despesa.numero_parcelas }}x | Data: {{
           despesa.data_compra|date:"d/m/Y" }}
